@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>홍성 역사인물 & 대한민국 영웅 MBTI 탐구소 | 2026 만해생각 미래교육한마당</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts (Jua / Nanum Gothic) -->
+    <link href="https://fonts.googleapis.com/css2?family=Jua&family=Nanum+Gothic:wght@400;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Nanum Gothic', sans-serif;
+            background-color: #F0FDF4;
+        }
+        .font-jua {
+            font-family: 'Jua', sans-serif;
+        }
+        .card-shadow {
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        }
+        .btn-bounce:hover {
+            transform: translateY(-3px);
+            transition: all 0.2s ease;
+        }
+        .progress-bar-fill {
+            transition: width 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+
+    <!-- Header -->
+    <header class="bg-emerald-600 text-white py-3 px-4 shadow-md sticky top-0 z-50">
+        <div class="max-w-2xl mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <span class="bg-yellow-400 text-emerald-900 font-jua text-xs px-2 py-1 rounded-full">2026 만해생각</span>
+                <h1 class="font-jua text-lg md:text-xl tracking-wide">🏛️ 홍성 역사인물 MBTI 탐구소</h1>
+            </div>
+            <button onclick="resetApp()" class="text-xs bg-emerald-700 hover:bg-emerald-800 px-2.5 py-1.5 rounded-lg transition flex items-center gap-1">
+                <i class="fa-solid fa-rotate-right"></i> 처음으로 돌아가기
+            </button>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="max-w-2xl w-full mx-auto p-4 flex-grow flex flex-col justify-center">
+
+        <!-- 1. START SCREEN -->
+        <div id="screen-start" class="bg-white rounded-3xl p-6 md:p-8 card-shadow border-4 border-emerald-200 text-center my-auto">
+            <div class="inline-block bg-emerald-100 text-emerald-800 px-4 py-1.5 rounded-full font-bold text-sm mb-4">
+                ✨ 미래교육한마당 특별 체험 부스
+            </div>
+            
+            <div class="relative w-32 h-32 mx-auto mb-4 bg-emerald-50 rounded-full flex items-center justify-center border-4 border-emerald-300">
+                <span class="text-6xl animate-bounce">🕵️‍♂️</span>
+            </div>
+
+            <h2 class="text-2xl md:text-3xl font-jua text-emerald-800 mb-3">
+                타임머신을 타고 떠나는<br>
+                <span class="text-amber-500">16가지 역사영웅 MBTI</span> 탐구!
+            </h2>
+
+            <p class="text-slate-600 text-sm md:text-base leading-relaxed mb-6">
+                내가 만약 위대한 역사 속 상황에 있었다면 어떤 선택을 했을까요?<br>
+                10개의 재밌는 질문에 답하고, 홍성의 인물(최영, 김좌진 등)과 대한민국 영웅(세종대왕, 이순신 등) 중 나랑 꼭 닮은 짝꿍을 찾아보세요!
+            </p>
+
+            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6 text-left">
+                <p class="text-xs font-bold text-amber-800 mb-1 flex items-center gap-1">
+                    <i class="fa-solid fa-star text-amber-500"></i> 부스 체험 순서
+                </p>
+                <ol class="text-xs text-slate-700 space-y-1 list-decimal list-inside font-medium">
+                    <li>AI 질문에 답하고 나의 16가지 MBTI 측정하기</li>
+                    <li>나와 닮은 역사인물 카드 확인하기</li>
+                    <li>알파벳 키캡을 조합해 나만의 MBTI 키캡 만들기!</li>
+                </ol>
+            </div>
+
+            <button onclick="startQuiz()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-jua text-xl py-4 rounded-2xl shadow-lg hover:shadow-xl btn-bounce flex items-center justify-center gap-2">
+                <span>🚀 탐구 시작하기!</span>
+                <i class="fa-solid fa-arrow-right"></i>
+            </button>
+        </div>
+
+        <!-- 2. QUIZ SCREEN -->
+        <div id="screen-quiz" class="hidden bg-white rounded-3xl p-6 card-shadow border-4 border-emerald-200 my-auto">
+            <!-- Progress Bar -->
+            <div class="mb-6">
+                <div class="flex justify-between text-xs font-bold text-emerald-700 mb-2">
+                    <span id="quiz-progress-text">질문 1 / 10</span>
+                    <span id="quiz-progress-percent">10% 완료</span>
+                </div>
+                <div class="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden border border-slate-200">
+                    <div id="quiz-progress-bar" class="bg-emerald-500 h-full rounded-full progress-bar-fill" style="width: 10%;"></div>
+                </div>
+            </div>
+
+            <!-- Question Box -->
+            <div class="mb-6">
+                <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-md mb-2" id="question-hero-tag">
+                    🛡️ 영웅의 이야기
+                </div>
+                <h3 id="question-title" class="text-lg md:text-xl font-bold text-slate-800 leading-snug mb-3">
+                    질문 내용
+                </h3>
+                <div id="question-hint" class="bg-blue-50 text-blue-800 text-xs p-3 rounded-xl border border-blue-100 flex items-start gap-2">
+                    <i class="fa-solid fa-lightbulb text-blue-500 mt-0.5"></i>
+                    <span id="question-hint-text">역사 힌트 내용</span>
+                </div>
+            </div>
+
+            <!-- Answer Options -->
+            <div class="space-y-3" id="answer-options">
+                <!-- Option buttons generated dynamically -->
+            </div>
+        </div>
+
+        <!-- 3. RESULT SCREEN -->
+        <div id="screen-result" class="hidden space-y-6 my-auto">
+            <div class="bg-white rounded-3xl p-6 md:p-8 card-shadow border-4 border-amber-300 text-center relative overflow-hidden">
+                <div class="absolute -right-6 -top-6 bg-amber-400 text-amber-900 font-jua text-xs px-8 py-3 rotate-12 shadow">
+                    탐구 완료!
+                </div>
+
+                <p class="text-xs font-bold text-slate-500 mb-1">나의 탐구 결과 MBTI</p>
+                <h2 id="result-mbti" class="text-4xl md:text-5xl font-jua text-emerald-600 mb-2">ENFP</h2>
+                <p id="result-mbti-title" class="text-base font-bold text-slate-700 mb-4">"성향 제목"</p>
+
+                <div class="border-t-2 border-dashed border-slate-200 my-4"></div>
+
+                <!-- Hero Card -->
+                <div class="bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-200 rounded-2xl p-5 text-left mb-6">
+                    <div class="flex items-center gap-3 mb-3">
+                        <span id="result-hero-emoji" class="text-4xl bg-white p-2 rounded-2xl shadow-sm border border-amber-100">🎨</span>
+                        <div>
+                            <span id="result-hero-badge" class="bg-emerald-200 text-emerald-900 text-[11px] font-bold px-2 py-0.5 rounded">홍성 대표 역사인물</span>
+                            <h3 id="result-hero-name" class="text-xl font-jua text-amber-900">이응노 화백</h3>
+                        </div>
+                    </div>
+                    <p id="result-hero-desc" class="text-xs md:text-sm text-slate-700 leading-relaxed font-medium mb-3">
+                        설명 내용
+                    </p>
+                    <div class="bg-white/80 rounded-xl p-3 text-xs text-slate-600 space-y-1">
+                        <p><strong>📜 주요 업적:</strong> <span id="result-hero-achieve">업적</span></p>
+                        <p><strong>💡 닮은 점:</strong> <span id="result-hero-trait">성향</span></p>
+                    </div>
+                </div>
+
+                <!-- Keycap Guide -->
+                <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-5 text-left">
+                    <h4 class="font-jua text-emerald-900 text-lg mb-2 flex items-center gap-2">
+                        <span>⌨️ 나만의 MBTI 키캡 만들기 가이드</span>
+                    </h4>
+                    <p class="text-xs text-slate-600 mb-3">
+                        부스에 준비된 키캡 재료로 나만의 개성 넘치는 키캡을 완성해 보세요!
+                    </p>
+                    <div class="bg-white rounded-xl p-3 border border-emerald-100 space-y-2 text-xs">
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-500 text-white font-bold w-5 h-5 rounded-full flex items-center justify-center text-[10px]">1</span>
+                            <p class="text-slate-700">나의 MBTI 스펠링 4자리 <strong>(<span id="result-keycap-mbti">ENFP</span>)</strong> 알파벳 키캡 준비하기!</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-500 text-white font-bold w-5 h-5 rounded-full flex items-center justify-center text-[10px]">2</span>
+                            <p class="text-slate-700">역사인물 캐릭터 스티커와 파츠로 나만의 키캡 예쁘게 꾸미기!</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="bg-emerald-500 text-white font-bold w-5 h-5 rounded-full flex items-center justify-center text-[10px]">3</span>
+                            <p class="text-slate-700">고리에 달아 가방에 걸면 '나만의 역사 영웅 키링' 완성!</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="resetApp()" class="w-full mt-6 bg-slate-800 hover:bg-slate-900 text-white font-jua text-lg py-3.5 rounded-2xl shadow btn-bounce flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-rotate-left"></i>
+                    <span>다른 친구 검사해보기 (처음으로)</span>
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-100 py-3 text-center text-xs text-slate-500 border-t border-slate-200">
+        2026 홍성 만해생각 미래교육한마당 | 지도교사 지원 프로그램
+    </footer>
+
+    <!-- JavaScript Application Logic -->
+    <script>
+        // COMPLETE 16 MBTI HISTORICAL HEROES DATABASE
+        const heroes = {
+            // 홍성 지정 역사인물 7인
+            "ESTJ": {
+                name: "최영 장군",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "⚔️",
+                title: "원칙을 지키는 든든한 리더",
+                desc: "원칙을 엄격하게 지키고 용맹하게 나라를 구한 최영 장군님과 비슷해요!",
+                achieve: "외적의 침입을 물리치고 '황금 보기를 돌같이 하라'는 가르침을 남겼어요.",
+                trait: "책임감이 강하고 옳다고 생각하는 일은 용기 있게 끝까지 추진해요."
+            },
+            "ENTJ": {
+                name: "백야 김좌진 장군",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "🐎",
+                title: "용감하게 나아가는 열정 대장",
+                desc: "당당한 리더십으로 청산리 대첩을 이끈 김좌진 장군님과 꼭 닮았어요!",
+                achieve: "청산리 대첩에서 대승을 거두고 겨레의 독립을 위해 싸웠어요.",
+                trait: "목표가 생기면 용감하게 전진하고 친구들을 잘 이끄는 대장부예요."
+            },
+            "INFJ": {
+                name: "매죽헌 성삼문",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "📜",
+                title: "생각이 깊고 따뜻한 신념가",
+                desc: "마음속 깊은 신념과 지조를 소중히 여긴 사육신 성삼문 선생과 닮았어요!",
+                achieve: "훈민정음 창제를 돕고, 어떤 위협에도 의리를 꺾지 않았어요.",
+                trait: "생각이 깊고 올바른 가치를 위해 마음을 다하는 곧은 성품을 가졌어요."
+            },
+            "INFP": {
+                name: "만해 한용운 선사",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "🪷",
+                title: "마음이 예쁘고 따뜻한 감성가",
+                desc: "평화와 님의 사랑을 시로 노래한 한용운 선생님과 똑 닮았어요!",
+                achieve: "3·1운동 민족대표로 활동하고 《님의 침묵》이라는 감동적인 시집을 썼어요.",
+                trait: "마음이 따뜻하고 풍부한 감수성을 가지고 아름다운 꿈을 꿔요."
+            },
+            "ENFP": {
+                name: "고암 이응노 화백",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "🎨",
+                title: "아이디어가 반짝이는 창의왕",
+                desc: "자유로운 생각으로 세계에 이름을 알린 이응노 선생님과 닮았어요!",
+                achieve: "글자와 사람을 재밌게 표현한 '문자추상', '군상' 등 세계적 그림을 그렸어요.",
+                trait: "호기심이 많고 도전을 두려워하지 않으며 세상을 풍부하게 표현해요."
+            },
+            "INTJ": {
+                name: "남당 한원진 선생",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "📖",
+                title: "지혜롭고 똑똑한 탐구가",
+                desc: "세상의 원리를 깊이 연구하고 공부한 학자 한원진 선생님과 꼭 닮았어요!",
+                achieve: "홍성을 대표하는 기호학파 학자로 마음과 성품의 이치를 깊이 연구했어요.",
+                trait: "궁금한 것은 끝까지 탐구하고 논리적으로 문제를 해결하는 지혜가 있어요."
+            },
+            "ISFJ": {
+                name: "보우국사",
+                badge: "🏛️ 홍성 대표 역사인물",
+                emoji: "🙏",
+                title: "친절하고 성실한 수호천사",
+                desc: "주변 사람들을 따뜻하게 배려하고 도와준 보우국사 스님과 닮았어요!",
+                achieve: "어려운 시대에 백성들의 마음을 위로하고 절과 우리 문화를 지켜냈어요.",
+                trait: "남을 잘 도와주고 조용히 자신의 맡은 바를 성실하게 해내요."
+            },
+
+            // 대한민국 대표 역사인물 9인
+            "ISTJ": {
+                name: "충무공 이순신 장군",
+                badge: "🇰🇷 대한민국 수호 영웅",
+                emoji: "🛡️",
+                title: "철저히 준비하는 명장",
+                desc: "거북선을 만들고 철저히 준비해 나라를 지킨 이순신 장군님과 닮았어요!",
+                achieve: "23전 23승 전승을 거두며 임진왜란에서 나라를 구했어요.",
+                trait: "맡은 일에 책임감이 강하고 철저하게 계획을 세워 행동해요."
+            },
+            "ENFJ": {
+                name: "세종대왕",
+                badge: "🇰🇷 성군 영웅",
+                emoji: "👑",
+                title: "배려와 사랑의 따뜻한 지도자",
+                desc: "백성을 사랑하는 마음으로 한글을 만드신 세종대왕님과 닮았어요!",
+                achieve: "훈민정음(한글)을 창제하고 과학과 문화를 크게 발전시켰어요.",
+                trait: "주변 사람들을 잘 챙기고 널리 혜택을 주는 꿈을 가지고 있어요."
+            },
+            "ISTP": {
+                name: "장영실",
+                badge: "🇰🇷 조선의 과학 영웅",
+                emoji: "⚙️",
+                title: "손재주 좋은 손끝의 마술사",
+                desc: "측우기와 자격루를 만든 만능 손재주꾼 장영실 선생님과 닮았어요!",
+                achieve: "해시계, 물시계, 측우기를 발명해 백성들의 생활을 도왔어요.",
+                trait: "기계를 잘 다루고 실용적이며 관찰력이 뛰어납니다."
+            },
+            "ISFP": {
+                name: "윤동주 시인",
+                badge: "🇰🇷 민족 시인",
+                emoji: "✨",
+                title: "순수하고 아름다운 맑은 영혼",
+                desc: "하늘과 바람과 별을 사랑한 윤동주 시인과 따뜻한 마음이 닮았어요!",
+                achieve: "《서시》, 《별 헤는 밤》 같은 순수하고 아름다운 시를 남겼어요.",
+                trait: "조용하지만 깊은 마음을 지녔고 예술적 감각이 뛰어나요."
+            },
+            "ESTP": {
+                name: "광개토대왕",
+                badge: "🇰🇷 고구려의 정벌왕",
+                emoji: "🏹",
+                title: "호쾌하고 당당한 모험가",
+                desc: "광활한 영토를 넓히며 호쾌하게 나아간 광개토대왕과 닮았어요!",
+                achieve: "고구려의 전성기를 이끌며 북방의 넓은 땅을 개척했어요.",
+                trait: "에너지가 넘치고 순발력이 뛰어나 새로운 도전에 즉각 나서요."
+            },
+            "ESFP": {
+                name: "단원 김홍도",
+                badge: "🇰🇷 조선의 풍속화가",
+                emoji: "🖌️",
+                title: "즐거움을 주는 분위기 메이커",
+                desc: "사람들의 해학적이고 신나는 모습을 재미있게 그린 김홍도와 닮았어요!",
+                achieve: "《씨름》, 《서당》 등 조선 시대 백성들의 삶을 생생히 그렸어요.",
+                trait: "재치와 유머가 넘치고 주변 사람들에게 유쾌한 즐거움을 줘요."
+            },
+            "INTP": {
+                name: "다산 정약용",
+                badge: "🇰🇷 실사구시 학자",
+                emoji: "💡",
+                title: "호기심 넘치는 아이디어 천재",
+                desc: "거중기를 만든 실학자 정약용 선생님처럼 호기심이 무궁무진해요!",
+                achieve: "거중기를 만들어 수원화성을 쌓고 500여 권의 지혜로운 책을 썼어요.",
+                trait: "원리를 다방면으로 파고들고 새로운 발명을 생각해내는 것을 좋아해요."
+            },
+            "ENTP": {
+                name: "율곡 이이",
+                badge: "🇰🇷 조선의 혁신 사상가",
+                emoji: "⚡",
+                title: "변화를 이끄는 똑똑한 지혜가",
+                desc: "미래를 예측하고 10만 양병설을 주장한 율곡 이이 선생님과 닮았어요!",
+                achieve: "나라의 먼 미래를 내다보고 새로운 변화와 개혁을 이끌었어요.",
+                trait: "두뇌 회전이 빠르고 기존 틀에 매이지 않는 신선한 아이디어를 내요."
+            },
+            "ESFJ": {
+                name: "유관순 열사",
+                badge: "🇰🇷 겨레의 독립 영웅",
+                emoji: "🇰🇷",
+                title: "용기 있고 다정한 수호자",
+                desc: "모두를 하나로 모아 용감하게 만세를 외친 유관순 열사님과 닮았어요!",
+                achieve: "아우내 장터에서 태극기를 나누어 주며 독립 만성 운동을 이끌었어요.",
+                trait: "친구들과 협동하는 것을 좋아하며 정의롭고 다정한 마음을 가졌어요."
+            }
+        };
+
+        // 10 EASY QUESTIONS
+        const questions = [
+            {
+                heroTag: "🛡️ 최영 장군 이야기 (E vs I)",
+                title: "쉬는 시간에 친구들과 놀 때, 나는 어떤 모습에 더 가까운가요?",
+                hint: "최영 장군님처럼 친구들을 모아 힘차게 놀아볼까요?",
+                options: [
+                    { text: "여러 친구 모아서 와글와글 신나게 게임이나 운동하기!", type: "E" },
+                    { text: "친한 친구 한두 명과 조용히 이야기하거나 혼자 그림 그리기!", type: "I" }
+                ]
+            },
+            {
+                heroTag: "🐎 김좌진 장군 이야기 (S vs N)",
+                title: "새로운 모험 게임을 시작할 때 나는 어떻게 하나요?",
+                hint: "김좌진 장군님은 확실한 전략과 눈앞의 지형을 아주 잘 살폈어요!",
+                options: [
+                    { text: "게임 설명서와 눈앞에 보이는 지도를 꼼꼼히 확인한다.", type: "S" },
+                    { text: "상상력을 발휘해 나만의 멋진 보물창고를 떠올려본다.", type: "N" }
+                ]
+            },
+            {
+                heroTag: "📜 성삼문 선생 이야기 (T vs F)",
+                title: "친구와 의견이 달라서 다툼이 생겼을 때, 나는 어떻게 해결하나요?",
+                hint: "성삼문 선생님은 올바른 가치와 따뜻한 마음을 모두 소중히 여겼어요.",
+                options: [
+                    { text: "누가 옳고 틀렸는지 정당하고 공정하게 따져본다.", type: "T" },
+                    { text: "친구 마음이 상하지 않았는지 먼저 다정하게 다독여준다.", type: "F" }
+                ]
+            },
+            {
+                heroTag: "🪷 한용운 선생님 이야기 (J vs P)",
+                title: "내일 친구들과 소풍을 가기로 했어요! 나는 오늘 밤에 무엇을 할까요?",
+                hint: "한용운 선생님은 한 번 정한 마음은 준비를 마친 뒤 변함없이 지켰어요.",
+                options: [
+                    { text: "가방에 넣을 물건을 차곡차곡 준비하고 일정을 미리 체크한다.", type: "J" },
+                    { text: "내일 아침 기분에 맞춰 신나게 준비해서 떠난다.", type: "P" }
+                ]
+            },
+            {
+                heroTag: "🎨 이응노 화백 이야기 (E vs I)",
+                title: "학급 장기자랑이나 무대에 올라갈 기회가 생기면?",
+                hint: "이응노 화백님은 세계 무대에서도 자신 있게 작품을 선보였어요!",
+                options: [
+                    { text: "신나서 손을 들고 “제가 해볼게요!” 하고 무대에 선다.", type: "E" },
+                    { text: "부끄러워서 마음속으로 응원하거나 관객석에서 박수를 친다.", type: "I" }
+                ]
+            },
+            {
+                heroTag: "📖 한원진 선생 이야기 (S vs N)",
+                title: "궁금한 책이나 옛날 동화책을 읽을 때 나의 생각은?",
+                hint: "한원진 선생님은 세상의 이치를 깊게 탐구하는 학자였어요.",
+                options: [
+                    { text: "책에 나온 진짜 사실과 역사 내용에 집중해서 읽는다.", type: "S" },
+                    { text: "'만약에 주인공이 다른 선택을 했다면?' 하고 상상의 나래를 편다.", type: "N" }
+                ]
+            },
+            {
+                heroTag: "🙏 보우국사 이야기 (T vs F)",
+                title: "친구가 열심히 만든 만들기를 실수로 망가뜨려 울고 있다면?",
+                hint: "보우국사 스님은 어려움에 처한 백성들을 진심으로 위로했어요.",
+                options: [
+                    { text: "고칠 수 있는 테이프나 풀을 가져와 고쳐줄 방법을 찾는다.", type: "T" },
+                    { text: "“속상했지?” 하고 슬픈 마음을 진심으로 같이 위로해준다.", type: "F" }
+                ]
+            },
+            {
+                heroTag: "👑 세종대왕 이야기 (J vs P)",
+                title: "방학 숙제를 할 때 나는 어떤 스타일에 가까운가요?",
+                hint: "세종대왕님은 계획적이고 체계적인 학문 연구를 중시하셨어요.",
+                options: [
+                    { text: "매일 조금씩 분량을 정해두고 계획대로 착착 끝낸다.", type: "J" },
+                    { text: "놀 때 신나게 놀다가 방학 끝날 때쯤 집중해서 한다.", type: "P" }
+                ]
+            },
+            {
+                heroTag: "🇰🇷 유관순 열사 이야기 (E vs I)",
+                title: "새로운 반이나 처음 보는 캠프에 갔을 때 나는?",
+                hint: "유관순 열사님은 처음 만난 사람들도 하나로 모으는 친화력이 높았어요.",
+                options: [
+                    { text: "먼저 다가가서 “안녕! 이름이 뭐야?” 하고 인사를 건넨다.", type: "E" },
+                    { text: "누군가 먼저 말을 걸어줄 때까지 조용히 기다려본다.", type: "I" }
+                ]
+            },
+            {
+                heroTag: "💡 정약용 선생 이야기 (T vs F)",
+                title: "힘들어하는 친구에게 어떤 말이 더 고마울까요?",
+                hint: "정약용 선생님은 실용적인 지혜로 사람들의 문제를 해결해 주셨어요.",
+                options: [
+                    { text: "문제를 확실하게 해결할 수 있는 똑똑한 지혜의 말!", type: "T" },
+                    { text: "언제나 네 편이 되어줄게 하는 따뜻한 응원의 말!", type: "F" }
+                ]
+            }
+        ];
+
+        // APP STATE
+        let currentQuestionIndex = 0;
+        let scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+
+        function startQuiz() {
+            document.getElementById('screen-start').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.remove('hidden');
+            currentQuestionIndex = 0;
+            scores = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const q = questions[currentQuestionIndex];
+            const total = questions.length;
+            const progressPercent = Math.round(((currentQuestionIndex + 1) / total) * 100);
+
+            document.getElementById('quiz-progress-text').innerText = `질문 ${currentQuestionIndex + 1} / ${total}`;
+            document.getElementById('quiz-progress-percent').innerText = `${progressPercent}% 완료`;
+            document.getElementById('quiz-progress-bar').style.width = `${progressPercent}%`;
+
+            document.getElementById('question-hero-tag').innerText = q.heroTag;
+            document.getElementById('question-title').innerText = q.title;
+            document.getElementById('question-hint-text').innerText = q.hint;
+
+            const optionsContainer = document.getElementById('answer-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((opt) => {
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left p-4 rounded-2xl border-2 border-emerald-100 hover:border-emerald-400 bg-slate-50 hover:bg-emerald-50 transition font-bold text-slate-700 text-sm md:text-base flex items-center justify-between btn-bounce group";
+                btn.innerHTML = `
+                    <span>${opt.text}</span>
+                    <i class="fa-solid fa-circle-check text-slate-300 group-hover:text-emerald-500 text-lg transition"></i>
+                `;
+                btn.onclick = () => handleSelectOption(opt.type);
+                optionsContainer.appendChild(btn);
+            });
+        }
+
+        function handleSelectOption(type) {
+            scores[type]++;
+            currentQuestionIndex++;
+
+            if (currentQuestionIndex < questions.length) {
+                renderQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-result').classList.remove('hidden');
+
+            const mbti = 
+                (scores.E >= scores.I ? "E" : "I") +
+                (scores.S >= scores.N ? "S" : "N") +
+                (scores.T >= scores.F ? "T" : "F") +
+                (scores.J >= scores.P ? "J" : "P");
+
+            const hero = heroes[mbti] || heroes["ENFP"];
+
+            document.getElementById('result-mbti').innerText = mbti;
+            document.getElementById('result-keycap-mbti').innerText = mbti;
+            document.getElementById('result-mbti-title').innerText = `"${hero.title}"`;
+            
+            document.getElementById('result-hero-emoji').innerText = hero.emoji;
+            document.getElementById('result-hero-badge').innerText = hero.badge;
+            document.getElementById('result-hero-name').innerText = hero.name;
+            document.getElementById('result-hero-desc').innerText = hero.desc;
+            document.getElementById('result-hero-achieve').innerText = hero.achieve;
+            document.getElementById('result-hero-trait').innerText = hero.trait;
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetApp() {
+            document.getElementById('screen-result').classList.add('hidden');
+            document.getElementById('screen-quiz').classList.add('hidden');
+            document.getElementById('screen-start').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
